@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#100b22">
+  <title>Happy Birthday, Shanmuk!</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --gold: #ffd879;
+      --cream: #fff6db;
+      --night: #100b22;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--cream);
+      background: radial-gradient(ellipse at 50% 0%, #382052 0%, #1b1231 38%, var(--night) 78%);
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    button { font: inherit; }
+
+    .birthday-lights {
+      position: fixed;
+      z-index: 0;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .light-string {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      width: 100%;
+      justify-content: space-around;
+      padding: 18px 4vw 0;
+      border-top: 2px solid rgba(255, 216, 121, .5);
+      color: var(--gold);
+      font-family: sans-serif;
+    }
+
+    .light-string span {
+      position: relative;
+      font-size: clamp(15px, 2vw, 25px);
+      animation: twinkle 1.8s ease-in-out infinite alternate;
+      filter: drop-shadow(0 0 9px currentColor);
+    }
+
+    .light-string span:nth-child(even) { color: #ff84b7; animation-delay: .6s; }
+    .light-string span:nth-child(3n) { color: #9fffe0; animation-delay: 1.1s; }
+
+    .spotlight {
+      position: absolute;
+      top: -15vh;
+      width: 48vw;
+      height: 85vh;
+      opacity: .16;
+      filter: blur(26px);
+      transform-origin: 50% 0;
+      animation: sway 8s ease-in-out infinite alternate;
+    }
+
+    .spotlight-left {
+      left: -12vw;
+      background: linear-gradient(180deg, #ffcb68, transparent 90%);
+      clip-path: polygon(42% 0, 58% 0, 100% 100%, 0 100%);
+    }
+
+    .spotlight-right {
+      right: -12vw;
+      background: linear-gradient(180deg, #db74ff, transparent 90%);
+      clip-path: polygon(42% 0, 58% 0, 100% 100%, 0 100%);
+      animation-delay: -3s;
+    }
+
+    .glow-orb {
+      position: absolute;
+      width: 220px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: #eaa5ff;
+      opacity: .13;
+      filter: blur(70px);
+      animation: float 8s ease-in-out infinite alternate;
+    }
+
+    .orb-one { top: 30%; left: -100px; }
+    .orb-two { right: -100px; bottom: 4%; background: #ffc96a; animation-delay: -4s; }
+
+    #fireworks {
+      position: fixed;
+      z-index: 1;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .birthday-intro {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      min-height: 100svh;
+      place-items: center;
+      padding: 90px 20px 50px;
+      text-align: center;
+      transition: opacity .8s ease, transform .8s ease;
+    }
+
+    .intro-content { animation: rise-in 1.2s both; }
+    .intro-stars { margin-bottom: 20px; color: var(--gold); font-size: 1.5rem; letter-spacing: .55em; }
+
+    .intro-content > p {
+      margin: 0 0 14px;
+      color: #e7c9fa;
+      font: 600 .72rem/1.5 system-ui, sans-serif;
+      letter-spacing: .28em;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--cream);
+      font-size: clamp(3rem, 10vw, 7rem);
+      font-weight: 500;
+      line-height: .96;
+      letter-spacing: .04em;
+      text-shadow: 0 0 28px rgba(255, 216, 121, .34);
+    }
+
+    .intro-line {
+      width: min(230px, 55vw);
+      height: 1px;
+      margin: 25px auto;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--gold);
+      font-size: clamp(1.35rem, 4vw, 2.4rem);
+      font-weight: 500;
+      letter-spacing: .16em;
+    }
+
+    .intro-cake {
+      position: relative;
+      width: max-content;
+      margin: 22px auto;
+      font-size: 3.4rem;
+      filter: drop-shadow(0 0 17px rgba(255, 180, 90, .35));
+      animation: cake-bob 2s ease-in-out infinite;
+    }
+
+    .candle-flame {
+      position: absolute;
+      top: -8px;
+      left: 48%;
+      font-size: 1.05rem;
+      transform: translateX(-50%);
+      animation: flicker .35s ease-in-out infinite alternate;
+    }
+
+    .intro-content button {
+      padding: 15px 25px;
+      border: 1px solid rgba(255, 216, 121, .8);
+      border-radius: 999px;
+      color: #25172c;
+      background: linear-gradient(135deg, #ffe9a7, #ffc76f);
+      box-shadow: 0 0 28px rgba(255, 194, 105, .2);
+      cursor: pointer;
+      font: 700 .8rem/1.2 system-ui, sans-serif;
+      letter-spacing: .08em;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .intro-content button:hover,
+    .intro-content button:focus-visible {
+      transform: translateY(-3px);
+      box-shadow: 0 0 38px rgba(255, 194, 105, .45);
+    }
+
+    .birthday-message {
+      position: relative;
+      z-index: 2;
+      display: none;
+      width: min(980px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 0 0 80px;
+      text-align: center;
+      animation: rise-in 1s both;
+    }
+
+    .birthday-message.visible { display: block; }
+    .birthday-message h2 { margin-bottom: 14px; }
+    .birthday-message > p { color: #e6d9ef; font: 1.05rem/1.8 system-ui, sans-serif; }
+
+    .photo-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 34px;
+    }
+
+    .photo-gallery img {
+      display: block;
+      width: 100%;
+      max-height: 520px;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border: 1px solid rgba(255, 216, 121, .45);
+      border-radius: 18px;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, .35);
+    }
+
+    footer {
+      position: relative;
+      z-index: 2;
+      padding: 0 16px 24px;
+      color: rgba(255, 246, 219, .55);
+      text-align: center;
+      font: .75rem system-ui, sans-serif;
+    }
+
+    @keyframes twinkle { from { opacity: .45; transform: scale(.85); } to { opacity: 1; transform: scale(1.15); } }
+    @keyframes sway { from { transform: rotate(-12deg); } to { transform: rotate(12deg); } }
+    @keyframes float { from { transform: translateY(-15px) scale(.9); } to { transform: translateY(20px) scale(1.1); } }
+    @keyframes rise-in { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes cake-bob { 50% { transform: translateY(-7px); } }
+    @keyframes flicker { from { opacity: .75; transform: translateX(-50%) rotate(-5deg) scale(.9); } to { opacity: 1; transform: translateX(-50%) rotate(5deg) scale(1.08); } }
+
+    @media (max-width: 600px) {
+      .photo-gallery { grid-template-columns: 1fr; }
+      .photo-gallery img { max-height: 430px; }
+      .intro-content > p { letter-spacing: .17em; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <!-- BIRTHDAY LIGHTING EXPERIENCE -->
+  <div class="birthday-lights" id="birthdayLights" aria-hidden="true">
+    <div class="light-string">
+      <span>✦</span><span>●</span><span>✦</span><span>●</span><span>✦</span>
+      <span>●</span><span>✦</span><span>●</span><span>✦</span>
+    </div>
+    <div class="spotlight spotlight-left"></div>
+    <div class="spotlight spotlight-right"></div>
+    <div class="glow-orb orb-one"></div>
+    <div class="glow-orb orb-two"></div>
+  </div>
+
+  <canvas id="fireworks" aria-hidden="true"></canvas>
+
+  <main>
+    <section class="birthday-intro" id="birthdayIntro">
+      <div class="intro-content">
+        <div class="intro-stars" aria-hidden="true">✦ ✧ ✦</div>
+        <p>A SPECIAL DAY FOR SOMEONE SPECIAL</p>
+        <h1>SHANMUK<br>SRIVASTAV</h1>
+        <div class="intro-line"></div>
+        <h2>HAPPY BIRTHDAY!</h2>
+        <div class="intro-cake" aria-hidden="true">
+          🎂<span class="candle-flame">🔥</span>
+        </div>
+        <button type="button" onclick="startCelebration()">LIGHT UP THE CELEBRATION ✨</button>
+      </div>
+    </section>
+
+    <section class="birthday-message" id="birthdayMessage" aria-live="polite">
+      <h2>Wishing You the Best Day Ever!</h2>
+      <p>May your year ahead be filled with laughter, wonderful memories, and everything that makes you happiest. Keep shining, Shanmuk! 🎉</p>
+      <div class="photo-gallery" aria-label="Birthday memories">
+        <img src="photo1.jpg" alt="A special birthday memory" loading="lazy">
+        <img src="photo2.jpg" alt="Another special birthday memory" loading="lazy">
+      </div>
+    </section>
+  </main>
+
+  <footer>Made with love to celebrate you ✨</footer>
+
+  <script>
+    const canvas = document.getElementById('fireworks');
+    const context = canvas.getContext('2d');
+    const particles = [];
+    let animationFrame;
+    let celebrationStarted = false;
+
+    function resizeCanvas() {
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = window.innerWidth * pixelRatio;
+      canvas.height = window.innerHeight * pixelRatio;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    }
+
+    function launchFirework(x = Math.random() * window.innerWidth, y = Math.random() * window.innerHeight * 0.55 + 35) {
+      const colors = ['#ffd879', '#ff84b7', '#9fffe0', '#dca6ff', '#ffffff'];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const count = 48;
+      for (let i = 0; i < count; i++) {
+        const angle = (Math.PI * 2 * i) / count;
+        const speed = 1.2 + Math.random() * 3.4;
+        particles.push({
+          x, y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          alpha: 1,
+          decay: .009 + Math.random() * .012,
+          color,
+          size: 1.5 + Math.random() * 2.2
+        });
+      }
+    }
+
+    function animateFireworks() {
+      context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const particle = particles[i];
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        particle.vy += .025;
+        particle.alpha -= particle.decay;
+        if (particle.alpha <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+        context.globalAlpha = particle.alpha;
+        context.fillStyle = particle.color;
+        context.beginPath();
+        context.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        context.fill();
+      }
+      context.globalAlpha = 1;
+      if (celebrationStarted || particles.length) animationFrame = requestAnimationFrame(animateFireworks);
+    }
+
+    function startCelebration() {
+      if (celebrationStarted) return;
+      celebrationStarted = true;
+      const intro = document.getElementById('birthdayIntro');
+      intro.style.opacity = '0';
+      intro.style.transform = 'scale(.96)';
+      window.setTimeout(() => {
+        intro.hidden = true;
+        const message = document.getElementById('birthdayMessage');
+        message.classList.add('visible');
+        message.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 700);
+      for (let i = 0; i < 5; i++) {
+        window.setTimeout(() => launchFirework(), i * 320);
+      }
+      if (!animationFrame) animateFireworks();
+      window.setInterval(() => launchFirework(), 1400);
+    }
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    canvas.addEventListener('click', event => {
+      if (celebrationStarted) launchFirework(event.clientX, event.clientY);
+    });
+  </script>
+</body>
+</html>
